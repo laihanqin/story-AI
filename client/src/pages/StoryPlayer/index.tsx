@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { getAccessHeaders } from '../../shared/services/access';
 
 interface StoryPage {
   pageNumber: number;
@@ -76,7 +77,7 @@ export default function StoryPlayer() {
     setFlipPhase('idle');
     setFlipProgress(0);
     setLoading(true);
-    fetch(`/api/stories/${id}`)
+    fetch(`/api/stories/${id}`, { headers: { ...getAccessHeaders() } })
       .then(r => r.json())
       .then(data => {
         if (data.success) setStory(data.data);
