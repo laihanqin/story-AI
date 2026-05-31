@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>提取视频帧</title>
+</head>
+<body>
+  <video id="v" src="/老虎跳舞.mp4" muted></video>
+  <canvas id="c"></canvas>
+  <script>
+    const v = document.getElementById('v');
+    const c = document.getElementById('c');
+    v.currentTime = 0.5;
+    v.onseeked = () => {
+      c.width = v.videoWidth;
+      c.height = v.videoHeight;
+      c.getContext('2d').drawImage(v, 0, 0);
+      const a = document.createElement('a');
+      a.href = c.toDataURL('image/png');
+      a.download = '老虎_帧.png';
+      a.click();
+    };
+  </script>
+</body>
+</html>
