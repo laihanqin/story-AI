@@ -1,0 +1,23 @@
+{
+  "name": "AI 故事共创",
+  "short_name": "故事共创",
+  "description": "儿童 AI 故事创作绘本",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "theme_color": "#fefce8",
+  "background_color": "#fefce8",
+  "icons": [
+    {
+      "src": "/icons/故事.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/故事.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
