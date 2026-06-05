@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>AI 故事共创</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#fefce8" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AI 故事共创" />
+
+    <!-- 强制横屏提示 + 全屏入口 -->
+    <style>
+      #landscape-tip {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        background: #1a1a2e;
+        color: #fff;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        gap: 16px;
+        font-family: sans-serif;
+      }
+      #landscape-tip .icon { font-size: 48px; animation: rotate-hint 1.5s ease-in-out infinite; }
+      @keyframes rotate-hint {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(90deg); }
+      }
+      @media (orientation: portrait) and (max-width: 1024px) {
+        #landscape-tip { display: flex; }
+      }
+
+      #fullscreen-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 99998;
+        background: rgba(0,0,0,0.85);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-family: sans-serif;
+        color: #fff;
+      }
+      #fullscreen-overlay button {
+        padding: 14px 40px;
+        font-size: 20px;
+        border: none;
+        border-radius: 50px;
+        background: #fbbf24;
+        color: #1a1a2e;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 30px rgba(251,191,36,0.5);
+      }
+      #fullscreen-overlay .ios-hint {
+        font-size: 14px;
+        color: #aaa;
+        text-align: center;
+        line-height: 1.6;
+        display: none;
+      }
+      /* iOS 设备显示添加到主屏幕提示 */
+      @supports (-webkit-touch-callout: none) {
+        #fullscreen-overlay .ios-hint { display: block; }
+      }
+      /* 手机横屏时（触屏设备 + 横屏），弹出全屏入口 */
+      @media (orientation: landscape) and (pointer: coarse) {
+        #fullscreen-overlay { display: flex; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-DAIIqYqz.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/vendor-2kccQ9D9.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-CyE6YT_i.css">
+  </head>
+  <body class="bg-yellow-50 font-kid">
+    <div id="landscape-tip">
+      <span class="icon">📱</span>
+      <span>请将手机横过来使用</span>
+    </div>
+    <div id="fullscreen-overlay">
+      <span style="font-size:40px">📖</span>
+      <button id="enter-fullscreen-btn">进入全屏阅读</button>
+      <p class="ios-hint">💡 全屏后，点击 Safari 底部 <b>分享</b> → <b>添加到主屏幕</b><br>下次打开就是 App 体验，没有地址栏</p>
+    </div>
+    <div id="root" style="min-height:100vh;background:#1a1a2e"></div>
+    <style>body{background:#1a1a2e!important;margin:0}</style>
+    <script>
+      (function() {
+        var overlay = document.getElementById('fullscreen-overlay');
+        var btn = document.getElementById('enter-fullscreen-btn');
+        var entered = false;
+
+        function goFullscreen() {
+          var el = document.documentElement;
+          if (el.requestFullscreen) {
+            el.requestFullscreen().then(function() {
+              if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(function(){});
+              }
+            }).catch(function(){});
+          } else if (el.webkitRequestFullscreen) {
+            el.webkitRequestFullscreen();
+          }
+        }
+
+        function hideOverlay() {
+          if (entered) return;
+          entered = true;
+          overlay.style.display = 'none';
+          goFullscreen();
+        }
+
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          hideOverlay();
+        });
+
+        // 点遮罩其他区域也触发
+        overlay.addEventListener('click', hideOverlay);
+
+        // 如果全屏被退出，重新显示入口
+        document.addEventListener('fullscreenchange', function() {
+          if (!document.fullscreenElement && entered) {
+            overlay.style.display = 'flex';
+            entered = false;
+          }
+        });
+        document.addEventListener('webkitfullscreenchange', function() {
+          if (!document.webkitFullscreenElement && entered) {
+            overlay.style.display = 'flex';
+            entered = false;
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
